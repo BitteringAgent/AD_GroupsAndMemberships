@@ -1,4 +1,4 @@
-#import activedirectory module
+#Import activedirectory module
 import-module activedirectory
 
 #Set Execution Policy so that you can run the script
@@ -8,12 +8,15 @@ write-host "Enter partial name of group(s) to list membership" -foregroundcolor 
 
 $groupname = read-host "Group Name"
 
+#Add wildcard after group
 $groupname = $groupname + '*'
 
 $Groups = (Get-AdGroup -filter * | Where-Object { $_.name -like $groupname } | Select-Object name -expandproperty name)
 
+#Create blank array to hold group membership data
 $Table = @()
 
+#Setup splat
 $Record = [ordered]@{
     "Group"          = ""
     "SamAccountName" = ""
@@ -35,6 +38,6 @@ Foreach ($Group in $Groups) {
 }
 write-host "Enter CSV name for output" -foregroundcolor cyan
 
-$outfile = read-host "CSV Name"
+$Outfile = read-host "CSV Name"
 
 $Table | export-csv "$outfile.csv" -NoTypeInformation
