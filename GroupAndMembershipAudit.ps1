@@ -10,7 +10,7 @@ $groupname = read-host "Group Name"
 
 $groupname = $groupname + '*'
 
-$Groups = (Get-AdGroup -filter * | Where { $_.name -like $groupname } | select name -expandproperty name)
+$Groups = (Get-AdGroup -filter * | Where-Object { $_.name -like $groupname } | Select-Object name -expandproperty name)
 
 $Table = @()
 
@@ -22,7 +22,7 @@ $Record = [ordered]@{
 
 Foreach ($Group in $Groups) {
 
-    $Arrayofmembers = Get-ADGroupMember -identity $Group | select name, samaccountname
+    $Arrayofmembers = Get-ADGroupMember -identity $Group | Select-Object name, samaccountname
 
     foreach ($Member in $Arrayofmembers) {
         $Record."Group" = $Group
